@@ -21,13 +21,13 @@
   </div>
 </ion-header>
 
-<ion-content class="ion-padding" [fullscreen]="true" style="--background: #FAF8F5;">
+<ion-content [fullscreen]="true" style="--background: #FAF8F5;">
   <!-- TELA INICIAL (HOME) -->
-  <div class="w-full max-w-4xl mx-auto px-4 sm:px-6 space-y-6">
+  <div class="w-full max-w-4xl mx-auto px-4 sm:px-6 space-y-6 py-6 pb-24">
 
     <!-- 1. Alerta Global de Prioridade (Atrasos) -->
     <!-- Ele só aparecerá se pelo menos um dos filhos tiver vacina atrasada. Como nosso mockup é focado no visual, estamos deixando ele fixo como exemplo, ou você pode atrelar isso a uma variável geral no futuro. -->
-    <div
+    <div *ngIf="hasAnyDelayed()"
       class="bg-brand-orange text-brand-brown p-4 rounded-2xl border-2 border-brand-brown shadow-tactile relative overflow-hidden mt-2">
       <div class="flex items-start gap-3.5">
         <div
@@ -50,7 +50,7 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
-        <!-- O loop ngFor percorre suas crianças e passa cada uma pelo motor "evaluateVaccineStatus" -->
+        <!-- O loop ngFor percorre suas crianças e delega o cálculo ao VacinaService -->
         <div *ngFor="let child of children; let idx = index" (click)="navigateTo('perfil', child.id)"
           [ngClass]="idx % 2 === 0 ? 'rotate-[-0.5deg]' : 'rotate-[0.5deg]'"
           class="bg-brand-paper p-5 rounded-2xl border-2 border-brand-clay shadow-tactile hover:rotate-0 transition-all duration-300 cursor-pointer">
@@ -66,7 +66,7 @@
                 <h4 class="font-serif text-lg font-black text-brand-brown">{{ child.nome }}</h4>
                 <!-- Chamada para formatar a idade -->
                 <p class="text-[10px] font-semibold text-brand-brown/50 uppercase tracking-wider">
-                  {{ formatAge(evaluateVaccineStatus(child).ageInMonths) }}
+                  {{ formatAge(getStatus(child).ageInMonths) }}
                 </p>
               </div>
             </div>
@@ -76,14 +76,14 @@
           <div class="mt-4">
 
             <!-- Mostra este se tiver vacina ATRASADA -->
-            <div *ngIf="evaluateVaccineStatus(child).totals.atrasada > 0"
+            <div *ngIf="getStatus(child).totals.atrasada > 0"
               class="bg-brand-orange/20 text-orange-800 text-xs font-bold px-3 py-2.5 rounded-xl flex items-center gap-2 border border-brand-orange/30">
               <i class="fa-solid fa-triangle-exclamation"></i>
-              <span>Atenção: {{ evaluateVaccineStatus(child).totals.atrasada }} dose(s) atrasadas!</span>
+              <span>Atenção: {{ getStatus(child).totals.atrasada }} dose(s) atrasadas!</span>
             </div>
 
             <!-- Mostra este se estiver TUDO EM DIA (Atrasada == 0) -->
-            <div *ngIf="evaluateVaccineStatus(child).totals.atrasada === 0"
+            <div *ngIf="getStatus(child).totals.atrasada === 0"
               class="bg-brand-green/20 text-brand-brown text-xs font-bold px-3 py-2.5 rounded-xl flex items-center gap-2 border border-brand-green/30">
               <i class="fa-solid fa-check text-brand-green"></i>
               <span>Proteção em dia</span>
@@ -102,7 +102,7 @@
     </div>
 
     <!-- 3. Campanhas de Saúde (Papel Secundário) -->
-    <div class="bg-[#FBF7F0] border-2 border-brand-clay p-5 rounded-squircle shadow-sm mt-6">
+    <div class="bg-[#FBF7F0] border-2 border-brand-clay p-5 rounded-2xl shadow-sm mt-6">
       <div class="space-y-2">
         <span
           class="bg-brand-yellow/40 text-brand-brown text-[8px] font-extrabold px-2 py-0.5 rounded border border-brand-brown/10 uppercase tracking-widest">Informativo
