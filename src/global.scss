@@ -1,37 +1,49 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
+/* Importando as fontes premium */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Sora:wght@100..800&display=swap');
 
-/* Core CSS required for Ionic components to work properly */
-@import "@ionic/angular/css/core.css";
+/* Diretivas fundamentais do Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Basic CSS for apps built with Ionic */
-@import "@ionic/angular/css/normalize.css";
-@import "@ionic/angular/css/structure.css";
-@import "@ionic/angular/css/typography.css";
-@import "@ionic/angular/css/display.css";
+/* Ajustes fundamentais de reset de fonte no Ionic */
+:root {
+  --ion-font-family: 'Sora', sans-serif;
+  --ion-background-color: #FAF8F5; /* brand-paper */
+  --ion-text-color: #473C33; /* brand-brown */
+}
 
-/* Optional CSS utils that can be commented out */
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
+/* Efeito de botão elástico que reage ao toque físico */
+.btn-elastic {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  &:active {
+    transform: scale(0.96);
+  }
+}
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+/* Sombras físicas/táteis de papel sobreposto */
+.shadow-tactile {
+  box-shadow: 0px 4px 0px 0px #473C33;
+}
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+.shadow-tactile-sm {
+  box-shadow: 0px 2px 0px 0px #473C33;
+}
+
+.shadow-inner-soft {
+  box-shadow: inset 0px 2px 4px 0px rgba(71, 60, 51, 0.08);
+}
+
+/* Costura/Espiral de caderno simulado na esquerda */
+.notebook-border {
+  border-left: 4px dashed #D5CABD; /* brand-clay */
+}
+
+/* Esconder barras de rolagem nativas para visual limpo de cartão */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
