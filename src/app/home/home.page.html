@@ -1,20 +1,122 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
+<!-- Header Verde Semântico Nativo com Tailwind -->
+<ion-header class="ion-no-border">
+  <div class="bg-brand-green border-b-2 border-brand-brown px-6 py-5 flex items-center justify-between">
+
+    <!-- Branding com Elementos Humanos -->
+    <div class="flex items-center space-x-2.5 cursor-pointer" (click)="navigateTo('home')">
+      <div
+        class="bg-brand-paper text-brand-brown w-9 h-9 rounded-xl flex items-center justify-center shadow-tactile-sm border border-brand-brown">
+        <i class="fa-solid fa-shield-heart text-base"></i>
+      </div>
+      <div>
+        <h1 class="font-serif text-2xl font-black tracking-tight text-brand-brown leading-none">Vacinei</h1>
+        <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-brown/70">Saúde em Dia</span>
+      </div>
+    </div>
+
+    <!-- Badges de Data da Simulação -->
+    <div class="text-right">
+      <span class="text-[9px] font-mono text-brand-brown/60 block">{{ currentDateStr }}</span>
+    </div>
+  </div>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding" [fullscreen]="true" style="--background: #FAF8F5;">
+  <!-- TELA INICIAL (HOME) -->
+  <div class="w-full max-w-4xl mx-auto px-4 sm:px-6 space-y-6">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <!-- 1. Alerta Global de Prioridade (Atrasos) -->
+    <!-- Ele só aparecerá se pelo menos um dos filhos tiver vacina atrasada. Como nosso mockup é focado no visual, estamos deixando ele fixo como exemplo, ou você pode atrelar isso a uma variável geral no futuro. -->
+    <div
+      class="bg-brand-orange text-brand-brown p-4 rounded-2xl border-2 border-brand-brown shadow-tactile relative overflow-hidden mt-2">
+      <div class="flex items-start gap-3.5">
+        <div
+          class="bg-brand-paper w-8 h-8 rounded-lg flex items-center justify-center text-brand-brown shadow-tactile-sm border border-brand-brown shrink-0 mt-0.5">
+          <i class="fa-solid fa-triangle-exclamation text-base"></i>
+        </div>
+        <div class="space-y-1">
+          <h4 class="font-serif text-base font-black leading-tight">Alerta de Pendência SUS</h4>
+          <p class="text-[11px] leading-relaxed text-brand-brown/95 font-medium">Você tem crianças com doses
+            recomendadas em atraso.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Seção Central de Crianças -->
+    <div class="space-y-4 pt-2">
+      <div>
+        <h2 class="font-serif text-3xl font-black tracking-tight text-brand-brown">Minha Família</h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+        <!-- O loop ngFor percorre suas crianças e passa cada uma pelo motor "evaluateVaccineStatus" -->
+        <div *ngFor="let child of children; let idx = index" (click)="navigateTo('perfil', child.id)"
+          [ngClass]="idx % 2 === 0 ? 'rotate-[-0.5deg]' : 'rotate-[0.5deg]'"
+          class="bg-brand-paper p-5 rounded-2xl border-2 border-brand-clay shadow-tactile hover:rotate-0 transition-all duration-300 cursor-pointer">
+
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3.5">
+              <!-- Selo Redondo com a Inicial do Nome -->
+              <div
+                class="bg-brand-cream text-brand-brown w-11 h-11 rounded-full flex items-center justify-center text-lg font-black border-2 border-brand-brown/10 shadow-inner-soft">
+                {{ child.nome.charAt(0) }}
+              </div>
+              <div>
+                <h4 class="font-serif text-lg font-black text-brand-brown">{{ child.nome }}</h4>
+                <!-- Chamada para formatar a idade -->
+                <p class="text-[10px] font-semibold text-brand-brown/50 uppercase tracking-wider">
+                  {{ formatAge(evaluateVaccineStatus(child).ageInMonths) }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Direto e Explícito dentro do Card -->
+          <div class="mt-4">
+
+            <!-- Mostra este se tiver vacina ATRASADA -->
+            <div *ngIf="evaluateVaccineStatus(child).totals.atrasada > 0"
+              class="bg-brand-orange/20 text-orange-800 text-xs font-bold px-3 py-2.5 rounded-xl flex items-center gap-2 border border-brand-orange/30">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <span>Atenção: {{ evaluateVaccineStatus(child).totals.atrasada }} dose(s) atrasadas!</span>
+            </div>
+
+            <!-- Mostra este se estiver TUDO EM DIA (Atrasada == 0) -->
+            <div *ngIf="evaluateVaccineStatus(child).totals.atrasada === 0"
+              class="bg-brand-green/20 text-brand-brown text-xs font-bold px-3 py-2.5 rounded-xl flex items-center gap-2 border border-brand-green/30">
+              <i class="fa-solid fa-check text-brand-green"></i>
+              <span>Proteção em dia</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Adicionar Nova Caderneta (Card Tracejado tátil) -->
+        <div (click)="navigateTo('cadastro')"
+          class="bg-brand-cream/30 p-5 rounded-2xl border-2 border-dashed border-brand-clay hover:bg-brand-clay/20 shadow-sm flex flex-col items-center justify-center space-y-2 text-center cursor-pointer btn-elastic">
+          <i class="fa-solid fa-plus-circle text-brand-brown/40 text-2xl"></i>
+          <span class="text-xs font-bold uppercase tracking-wider text-brand-brown/60">Adicionar Perfil</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Campanhas de Saúde (Papel Secundário) -->
+    <div class="bg-[#FBF7F0] border-2 border-brand-clay p-5 rounded-squircle shadow-sm mt-6">
+      <div class="space-y-2">
+        <span
+          class="bg-brand-yellow/40 text-brand-brown text-[8px] font-extrabold px-2 py-0.5 rounded border border-brand-brown/10 uppercase tracking-widest">Informativo
+          SUS</span>
+        <h4 class="font-serif text-xl font-black text-brand-brown leading-tight">Campanhas Ativas</h4>
+        <p class="text-xs text-brand-brown/70 leading-relaxed pb-2">
+          Verifique as ações especiais temporárias do SUS para imunização comunitária.
+        </p>
+        <button (click)="navigateTo('campanhas')"
+          class="btn-elastic w-full bg-brand-paper border-2 border-brand-brown text-brand-brown font-bold text-xs py-3 rounded-xl shadow-tactile flex items-center justify-center gap-2">
+          Ver Campanhas <i class="fa-solid fa-arrow-right-long"></i>
+        </button>
+      </div>
+    </div>
+
   </div>
 </ion-content>
