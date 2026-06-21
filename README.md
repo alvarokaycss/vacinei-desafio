@@ -1,5 +1,7 @@
 # Vacinei
 
+🌍 **[Acesse a aplicação ao vivo clicando aqui!](https://vacinei-desafio.vercel.app/)**
+
 Este projeto é a minha submissão para o Desafio de Estágio Frontend. O objetivo foi criar uma aplicação web para facilitar o acompanhamento da caderneta de vacinação infantil, baseada no calendário do SUS.
 
 ## 🛠 O que usei
