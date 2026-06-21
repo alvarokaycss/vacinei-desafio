@@ -1,13 +1,91 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>cadastro</ion-title>
-  </ion-toolbar>
+<ion-header class="ion-no-border">
+  <div class="bg-brand-green border-b-2 border-brand-brown px-6 py-5 flex items-center space-x-3">
+    <button (click)="goBack()" class="bg-brand-paper text-brand-brown w-9 h-9 rounded-xl flex items-center justify-center shadow-tactile-sm border border-brand-brown btn-elastic">
+      <i class="fa-solid fa-arrow-left text-sm"></i>
+    </button>
+    <div>
+      <h1 class="font-serif text-2xl font-black tracking-tight text-brand-brown leading-none">
+        {{ modo === 'criar' ? 'Criar Perfil' : 'Editar Perfil' }}
+      </h1>
+      <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-brown/70">
+        {{ modo === 'criar' ? 'Cadastrar nova criança' : 'Atualizar dados do perfil' }}
+      </span>
+    </div>
+  </div>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">cadastro</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" [scrollY]="true" style="--background: #FAF8F5; --padding-bottom: 80px;">
+  <div class="w-full max-w-lg mx-auto px-4 py-8 space-y-6">
+
+    <!-- Feedback de sucesso -->
+    <div *ngIf="salvoComSucesso" class="bg-brand-green/20 border-2 border-brand-green/40 rounded-2xl p-4 flex items-center gap-3">
+      <i class="fa-solid fa-circle-check text-brand-green text-xl"></i>
+      <span class="font-bold text-brand-brown text-sm">Perfil salvo! Redirecionando...</span>
+    </div>
+
+    <!-- Formulário -->
+    <div *ngIf="!salvoComSucesso" class="bg-brand-paper border-2 border-brand-clay rounded-2xl p-6 shadow-tactile space-y-5">
+
+      <!-- Campo Nome -->
+      <div class="space-y-2">
+        <label class="text-[10px] font-extrabold uppercase tracking-widest text-brand-brown/60 block">
+          Nome Completo
+        </label>
+        <input
+          [(ngModel)]="nome"
+          type="text"
+          placeholder="Ex: Bia Santos"
+          class="w-full bg-brand-cream/40 border-2 border-brand-clay rounded-xl px-4 py-3 text-brand-brown font-medium text-sm placeholder-brand-brown/30 focus:outline-none focus:border-brand-brown transition-colors"
+          [ngClass]="erroNome ? 'border-brand-orange' : 'border-brand-clay'"
+        />
+        <p *ngIf="erroNome" class="text-[11px] text-orange-700 font-semibold flex items-center gap-1">
+          <i class="fa-solid fa-triangle-exclamation text-xs"></i> {{ erroNome }}
+        </p>
+      </div>
+
+      <!-- Campo Data de Nascimento -->
+      <div class="space-y-2">
+        <label class="text-[10px] font-extrabold uppercase tracking-widest text-brand-brown/60 block">
+          Data de Nascimento
+        </label>
+        <input
+          [(ngModel)]="dataNascimento"
+          type="date"
+          class="w-full bg-brand-cream/40 border-2 border-brand-clay rounded-xl px-4 py-3 text-brand-brown font-medium text-sm focus:outline-none focus:border-brand-brown transition-colors"
+          [ngClass]="erroData ? 'border-brand-orange' : 'border-brand-clay'"
+        />
+        <p *ngIf="erroData" class="text-[11px] text-orange-700 font-semibold flex items-center gap-1">
+          <i class="fa-solid fa-triangle-exclamation text-xs"></i> {{ erroData }}
+        </p>
+      </div>
+
+      <!-- Botão Salvar -->
+      <button (click)="salvar()"
+              class="btn-elastic w-full bg-brand-green border-2 border-brand-brown text-brand-brown font-black text-sm py-4 rounded-xl shadow-tactile flex items-center justify-center gap-2 mt-2">
+        <i class="fa-solid fa-floppy-disk"></i>
+        {{ modo === 'criar' ? 'Salvar Perfil' : 'Atualizar Perfil' }}
+      </button>
+
+      <!-- Botão Cancelar -->
+      <button (click)="goBack()"
+              class="btn-elastic w-full bg-transparent text-brand-brown/60 font-bold text-sm py-3 rounded-xl border border-transparent hover:border-brand-clay transition-all">
+        Cancelar
+      </button>
+    </div>
+
+    <!-- Zona de Perigo: Excluir Perfil (apenas no modo edição) -->
+    <div *ngIf="modo === 'editar' && !salvoComSucesso"
+         class="bg-brand-paper border-2 border-brand-orange/30 rounded-2xl p-5 space-y-3">
+      <h4 class="font-serif font-black text-brand-brown text-base">Zona de Perigo</h4>
+      <p class="text-xs text-brand-brown/60 leading-relaxed">
+        Ao excluir o perfil, todo o histórico vacinal desta criança será removido permanentemente.
+      </p>
+      <button (click)="excluir()"
+              class="btn-elastic w-full bg-brand-orange/20 border-2 border-brand-orange/50 text-orange-800 font-bold text-sm py-3 rounded-xl flex items-center justify-center gap-2">
+        <i class="fa-solid fa-trash"></i>
+        Excluir Perfil
+      </button>
+    </div>
+
+  </div>
 </ion-content>

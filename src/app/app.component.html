@@ -1,3 +1,28 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <router-outlet></router-outlet>
+
+  <!-- Bottom Navigation fixo visível em todas as telas -->
+  <div style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 999; background: #FAF8F5; border-top: 2px solid #D5CABD; padding-bottom: env(safe-area-inset-bottom, 0px);">
+    <div class="max-w-4xl mx-auto flex items-stretch">
+
+      <a routerLink="/home" routerLinkActive="text-brand-brown bg-brand-clay/10 shadow-inner-soft" [routerLinkActiveOptions]="{exact: true}"
+         class="flex-1 flex flex-col items-center justify-center py-3 gap-1 text-brand-brown/40 transition-all active:scale-95 no-underline min-h-[56px] rounded-xl m-1">
+        <i class="fa-solid fa-house text-lg"></i>
+        <span class="text-[9px] font-extrabold uppercase tracking-widest">Família</span>
+      </a>
+
+      <a routerLink="/campanhas" routerLinkActive="text-brand-brown bg-brand-clay/10 shadow-inner-soft"
+         class="flex-1 flex flex-col items-center justify-center py-3 gap-1 text-brand-brown/40 transition-all active:scale-95 no-underline min-h-[56px] rounded-xl m-1">
+        <i class="fa-solid fa-bullhorn text-lg"></i>
+        <span class="text-[9px] font-extrabold uppercase tracking-widest">Campanhas</span>
+      </a>
+
+      <a routerLink="/cadastro" routerLinkActive="text-brand-brown bg-brand-clay/10 shadow-inner-soft"
+         class="flex-1 flex flex-col items-center justify-center py-3 gap-1 text-brand-brown/40 transition-all active:scale-95 no-underline min-h-[56px] rounded-xl m-1">
+        <i class="fa-solid fa-user-plus text-lg"></i>
+        <span class="text-[9px] font-extrabold uppercase tracking-widest">Cadastrar</span>
+      </a>
+
+    </div>
+  </div>
 </ion-app>

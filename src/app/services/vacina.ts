@@ -59,17 +59,52 @@ export class VacinaService {
     {
       id: 1,
       nome: "Bia Santos",
-      dataNascimento: "2026-04-19",
+      dataNascimento: "2026-04-19", // 2 meses. Faixa de 2 meses = disponível
       vacinasAplicadas: [
-        { vacinaId: 1, dose: 1, dataAplicacao: "2026-04-20" }
+        // Ao Nascer (ok)
+        { vacinaId: 1, dose: 1, dataAplicacao: "2026-04-20" },
+        { vacinaId: 2, dose: 1, dataAplicacao: "2026-04-20" },
+        // 2 Meses (tomou quase todas, falta SÓ 1 para ficar disponível)
+        { vacinaId: 3, dose: 1, dataAplicacao: "2026-06-19" },
+        { vacinaId: 4, dose: 1, dataAplicacao: "2026-06-19" },
+        { vacinaId: 5, dose: 1, dataAplicacao: "2026-06-19" }
+        // Faltou a vacinaId 6 (Pneumocócica), então fica 1 Disponível!
       ]
     },
     {
       id: 2,
       nome: "Arthur Rezende",
-      dataNascimento: "2025-07-19",
+      dataNascimento: "2025-07-19", // 11 meses.
       vacinasAplicadas: [
-        { vacinaId: 1, dose: 1, dataAplicacao: "2025-07-20" }
+        // Ao Nascer
+        { vacinaId: 1, dose: 1, dataAplicacao: "2025-07-20" },
+        { vacinaId: 2, dose: 1, dataAplicacao: "2025-07-20" },
+        // 2 Meses
+        { vacinaId: 3, dose: 1, dataAplicacao: "2025-09-20" },
+        { vacinaId: 4, dose: 1, dataAplicacao: "2025-09-20" },
+        { vacinaId: 5, dose: 1, dataAplicacao: "2025-09-20" },
+        { vacinaId: 6, dose: 1, dataAplicacao: "2025-09-20" },
+        // 4 Meses
+        { vacinaId: 3, dose: 2, dataAplicacao: "2025-11-20" },
+        { vacinaId: 4, dose: 2, dataAplicacao: "2025-11-20" },
+        { vacinaId: 5, dose: 2, dataAplicacao: "2025-11-20" },
+        { vacinaId: 6, dose: 2, dataAplicacao: "2025-11-20" },
+        // 6 Meses (A dose máxima era 7 meses de idade)
+        { vacinaId: 3, dose: 3, dataAplicacao: "2026-01-20" },
+        { vacinaId: 4, dose: 3, dataAplicacao: "2026-01-20" },
+        // => FALTANDO: { vacinaId: 6, dose: 3 } (Pneumocócica). Como ele tem 11 meses, ela está genuinamente ATRASADA!
+        // 9 Meses (A dose máxima é 11 meses)
+        { vacinaId: 8, dose: 1, dataAplicacao: "2026-04-20" }
+      ]
+    },
+    {
+      id: 3,
+      nome: "Leo",
+      dataNascimento: "2026-05-19", // 1 mês de vida
+      vacinasAplicadas: [
+        // Completamente Saudável / Em Dia
+        { vacinaId: 1, dose: 1, dataAplicacao: "2026-05-20" },
+        { vacinaId: 2, dose: 1, dataAplicacao: "2026-05-20" }
       ]
     }
   ];
@@ -106,6 +141,28 @@ export class VacinaService {
 
   deleteCrianca(id: number): void {
     this.criancas = this.criancas.filter(c => c.id !== id);
+  }
+
+  // Marca ou desmarca uma vacina no histórico da criança
+  toggleVacina(criancaId: number, vacinaId: number, dose: number, dataAplicacao: string): void {
+    const crianca = this.getCriancaById(criancaId);
+    if (!crianca) return;
+
+    const index = crianca.vacinasAplicadas.findIndex(
+      v => v.vacinaId === vacinaId && v.dose === dose
+    );
+
+    if (index !== -1) {
+      // Se já tem, remove (desmarca)
+      crianca.vacinasAplicadas.splice(index, 1);
+    } else {
+      // Se não tem, adiciona (marca como aplicada)
+      crianca.vacinasAplicadas.push({
+        vacinaId,
+        dose,
+        dataAplicacao
+      });
+    }
   }
 
   // Motor de status vacinal — centralizado aqui para ser reutilizado em qualquer tela

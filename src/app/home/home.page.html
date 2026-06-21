@@ -21,7 +21,7 @@
   </div>
 </ion-header>
 
-<ion-content [fullscreen]="true" style="--background: #FAF8F5;">
+<ion-content [fullscreen]="true" [scrollY]="true" style="--background: #FAF8F5; --padding-bottom: 80px;">
   <!-- TELA INICIAL (HOME) -->
   <div class="w-full max-w-4xl mx-auto px-4 sm:px-6 space-y-6 py-6 pb-24">
 
@@ -82,8 +82,15 @@
               <span>Atenção: {{ getStatus(child).totals.atrasada }} dose(s) atrasadas!</span>
             </div>
 
-            <!-- Mostra este se estiver TUDO EM DIA (Atrasada == 0) -->
-            <div *ngIf="getStatus(child).totals.atrasada === 0"
+            <!-- Mostra este se NÃO tiver atrasada, mas tiver DISPONÍVEL (Atenção) -->
+            <div *ngIf="getStatus(child).totals.atrasada === 0 && getStatus(child).totals.atencao > 0"
+              class="bg-brand-yellow/30 text-yellow-800 text-xs font-bold px-3 py-2.5 rounded-xl flex items-center gap-2 border border-brand-yellow/40">
+              <i class="fa-regular fa-clock"></i>
+              <span>{{ getStatus(child).totals.atencao }} dose(s) disponíveis</span>
+            </div>
+
+            <!-- Mostra este se estiver TUDO EM DIA (Atrasada == 0 e Atenção == 0) -->
+            <div *ngIf="getStatus(child).totals.atrasada === 0 && getStatus(child).totals.atencao === 0"
               class="bg-brand-green/20 text-brand-brown text-xs font-bold px-3 py-2.5 rounded-xl flex items-center gap-2 border border-brand-green/30">
               <i class="fa-solid fa-check text-brand-green"></i>
               <span>Proteção em dia</span>

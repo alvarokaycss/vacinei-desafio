@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { RouterLink } from '@angular/router';
+import { IonHeader, IonContent } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { VacinaService } from '../services/vacina';
 import { Crianca } from '../models';
@@ -11,7 +12,8 @@ import { Crianca } from '../models';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonHeader, IonContent, CommonModule, FormsModule],
+  styles: [':host { display: flex; flex-direction: column; position: absolute; inset: 0; }']
 })
 export class HomePage implements OnInit {
 
